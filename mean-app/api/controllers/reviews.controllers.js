@@ -68,3 +68,70 @@ module.exports.reviewsGetById = function(req,res){
 
 
 };
+
+var _addReview = function(req,res, hotel){
+
+     
+
+    hotel.reviews.push({
+        name : req.body.name ,
+        rating : parseInt(req.body.rating, 10),
+        review : req.body.review
+    });
+
+    hotel.save(function(err,hotelUpdated){
+        
+        if(err){
+
+            res
+                .status(500)
+                .json(err);
+        }else {
+
+            res
+                .status(201)
+                .json(hotelUpdated.reviews[hotelUpdated.reviews.length -1]);
+
+        }
+    });
+
+};
+
+module.exports.reviewsAddOne = function(req,res){
+
+    var hotelId = req.params.hotelId;
+
+     Hotel
+        .findById(hotelId)
+        .select('reviews')
+        .exec(function(err,doc){
+
+            var response = {
+                status : 200,
+                message : []
+            };
+
+            if(err){
+                console.log("Error finding hotel");
+                response.status = 500;
+                response.message = err;
+
+            }else if(!doc){
+                console.log("The hotel ID cannot be found");
+                response.status = 404;
+                response.message = {
+                        "message" : "The hotel ID cannot be found"
+                }
+            }
+
+                if(doc){
+                    _addReview(req,res,doc);
+                    }                     
+
+        });
+
+};
+
+module.exports.reviewsUpdateGetById = function(req, res){
+
+};
