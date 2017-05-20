@@ -5,6 +5,15 @@ var runGeoQuery = function(req,res){
 
     var lng = parseFloat(req.query.lng);
     var lat = parseFloat(req.query.lat);
+   
+    if(isNaN(lat) || isNaN(lng)){
+
+        console.log("Got here");
+        res
+            .status(400)
+            .json({"message" : "Longitude and Lattitude values must be a float"});
+        return;
+    }else{
 
     //Create geoJSON point
     var point = {
@@ -20,13 +29,37 @@ var runGeoQuery = function(req,res){
 
       Hotel
                 .geoNear(point,geoOptions,function(err, results, stats){
-                        console.log("Geo Results ", results);
+                      //  console.log("Geo Results ", results);
                         console.log("Geo stats ", stats);
 
+                         var response = {
+                           status : 200,
+                           message : results
+                         };
+
+                        // console.log(stats.nscanned);
+                        if(err){
+                            console.log("Error with retrieving hotel by loacation ",err);
+                            response.status(500);
+                            response.message(err);
+                            return;
+                        }
+
+                        if(stats.objectsLoaded == 0){
+                            response.status =404;
+                            response.message = { "message" : "No Hotels were found within the search area"};
+                        }
+                        
+                        
+
+                    
                         res
-                            .status(200)
-                            .json(results);
+                            .status(response.status)
+                            .json(response.message);
+                        
                 });
+
+    }
 
 };
 
