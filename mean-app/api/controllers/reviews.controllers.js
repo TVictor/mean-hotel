@@ -134,4 +134,141 @@ module.exports.reviewsAddOne = function(req,res){
 
 module.exports.reviewsUpdateGetById = function(req, res){
 
+    var hotelId = req.params.hotelId;
+    var reviewId = req.params.reviewId;
+
+    console.log("Update reviewId "+reviewId+" for hotelId "+hotelId);   
+
+    Hotel
+        .findById(hotelId)
+        .select('reviews')
+        .exec(function(err,doc){
+
+            var response = {
+                status : 200,
+                message : doc
+            };
+
+            var thisReview;
+
+              if(err){
+                     console.log("Error finding hotels");
+                     
+                     response.status = 500;
+                     response.message = err;
+                 
+                }else if(!doc){
+                    
+                     response.status = 404;
+                     response.message = "Hotel ID not found";
+                }
+
+                if(response.status != 200){
+
+                     res
+                 .status(response.status)
+                 .json( response.message );
+
+                }else {
+
+                    console.log(req.body.name);
+                                        
+        
+                 thisReview = doc.reviews.id(reviewId);
+
+                    console.log(thisReview);
+
+                    thisReview.name = req.body.name;
+                    thisReview.review = req.body.review;
+                    thisReview.rating = parseInt(req.body.rating,10);
+
+                 doc.save(function(err, hotelUpdated){
+                        if(err){
+                            res
+                                .status(500)
+                                .json(err);
+                        }else{
+                            res
+                                .status(204)
+                                .json();
+                        }
+                 });          
+        };
+
+        });
+
 };
+
+module.exports.reviewsDelete = function(req,res){
+
+    var hotelId = req.params.hotelId;
+    var reviewId = req.params.reviewId;
+
+    console.log("Delete reviewId "+reviewId+" for hotelId "+hotelId);   
+
+    Hotel
+        .findById(hotelId)
+        .select('reviews')
+        .exec(function(err,doc){
+
+            var response = {
+                status : 204,
+                message : doc
+            };
+
+            var thisReview;
+
+             console.log(doc);
+
+              thisReview = doc.reviews.id(reviewId);
+
+
+              if(err){
+                     console.log("Error finding hotels");
+                     
+                     response.status = 500;
+                     response.message = err;
+                 
+                }else if(!doc){
+                   
+                     response.status = 404;
+                     response.message = "Hotel ID not found";
+                }
+
+                if(!thisReview){
+                     response.status = 404;
+                     response.message = {
+                         "message" : "Review ID not found " + reviewId
+                     };
+                 }
+
+                    console.log(response.status);
+                if(response.status != 204){
+
+                     res
+                 .status(response.status)
+                 .json( response.message );
+
+                }else {
+
+               
+                console.log(thisReview);
+
+                thisReview.remove();
+
+                 doc.save(function(err, hotelUpdated){
+                        if(err){
+                            res
+                                .status(500)
+                                .json(err);
+                        }else{
+                            res
+                                .status(204)
+                                .json();
+                        }
+                 });          
+        };
+
+        });
+
+}

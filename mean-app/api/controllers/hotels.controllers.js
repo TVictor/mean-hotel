@@ -144,7 +144,7 @@ module.exports.hotelsGetById = function(req,res){
                 }else if(!doc){
                     
                      response.status = 404;
-                     response.message = "Hotel ID not found";
+                     response.message = {"message" : "Hotel ID not found"};
                 }
                  
                 
@@ -266,3 +266,33 @@ module.exports.hotelsAddOne = function(req,res){
     
     });
  }
+
+ module.exports.hotelsDelete = function(req,res){
+
+        var hotelId = req.params.hotelId;
+
+        Hotel
+            .findByIdAndRemove(hotelId)
+            .exec(function(err, hotel){
+
+                if(err){
+                    console.log("Hotel Id not found to be deleted",err)
+                    res
+                        .status(404)
+                        .json(err);
+                }else if (!hotel){
+
+                    res
+                        .status(404)
+                        .json({"message" : "Hotel Id not found"})
+
+                    }else{
+                    console.log("Hotel Deleted, id: ", hotelId);
+
+                    res
+                        .status(204)
+                        .json();
+                }
+
+            });
+ };

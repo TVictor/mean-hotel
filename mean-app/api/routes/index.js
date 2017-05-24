@@ -14,7 +14,8 @@ router
  router
  .route('/hotels/:hotelId')
  .get(ctrlHotels.hotelsGetById)
- .put(ctrlHotels.hotelsUpdateGetById);
+ .put(ctrlHotels.hotelsUpdateGetById)
+ .delete(ctrlHotels.hotelsDelete);
 
 //Review Routes
 router
@@ -25,6 +26,7 @@ router
  router
  .route('/hotels/:hotelId/reviews/:reviewId')
  .get(ctrlReviews.reviewsGetById)
- .put(ctrlReviews.reviewsUpdateGetById);
+ .put(ctrlReviews.reviewsUpdateGetById)
+ .delete(ctrlReviews.reviewsDelete);
 
 module.exports = router;
