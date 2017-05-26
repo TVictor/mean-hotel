@@ -8,7 +8,5 @@ function HotelsController(hotelDataFactory){
     hotelDataFactory.hotelList().then(function(response){
        
        vm.hotels = response;
-        console.log("Here should be data");
-        console.log(response);
     });
 }

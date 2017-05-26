@@ -11,11 +11,10 @@ function HotelController($routeParams, hotelDataFactory){
 
         vm.hotel = response;
         vm.stars = _getStarRating(response.stars);
-        console.log(vm.stars);
+        //console.log(vm.stars);
     });
 
     function _getStarRating(stars){
-       // console.log(stars);
-        return new Array(stars);
+               return new Array(stars);
     }
 }
