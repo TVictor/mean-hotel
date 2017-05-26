@@ -12,10 +12,10 @@ module.exports.register= function(req,res) {
     console.log('registering user');
 
     var username = req.body.username;
-    var name = req.body.name || null;console.log('User found');
+    var name = req.body.name || null;
     var password = req.body.password;
 
-    User.create({
+       User.create({
         username: username,
         name: name,
         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10))

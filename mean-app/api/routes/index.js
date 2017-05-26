@@ -9,26 +9,26 @@ var ctrlUsers = require('../controllers/users.controllers.js');
 //Hotel routes
 router
  .route('/hotels')
- .get(ctrlUsers.authenticate,ctrlHotels.hotelsGetAll)
- .post(ctrlHotels.hotelsAddOne);
+ .get(ctrlHotels.hotelsGetAll)
+ .post(ctrlUsers.authenticate,ctrlHotels.hotelsAddOne);
 
  router
  .route('/hotels/:hotelId')
  .get(ctrlHotels.hotelsGetById)
- .put(ctrlHotels.hotelsUpdateGetById)
- .delete(ctrlHotels.hotelsDelete);
+ .put(ctrlUsers.authenticate,ctrlHotels.hotelsUpdateGetById)
+ .delete(ctrlUsers.authenticate,ctrlHotels.hotelsDelete);
 
 //Review Routes
 router
  .route('/hotels/:hotelId/reviews')
  .get(ctrlReviews.reviewsGetAll)
- .post(ctrlReviews.reviewsAddOne);
+ .post(ctrlUsers.authenticate,ctrlReviews.reviewsAddOne);
 
  router
  .route('/hotels/:hotelId/reviews/:reviewId')
  .get(ctrlReviews.reviewsGetById)
- .put(ctrlReviews.reviewsUpdateGetById)
- .delete(ctrlReviews.reviewsDelete);
+ .put(ctrlUsers.authenticate,ctrlReviews.reviewsUpdateGetById)
+ .delete(ctrlUsers.authenticate,ctrlReviews.reviewsDelete);
 
 //Auth
 
